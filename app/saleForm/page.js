@@ -32,6 +32,26 @@ const SaleForm = () => {
     // console.log(sale);
     // console.log(finalSale)
     try {
+      const docRef = doc(
+        db,
+        `stock/lenses/${finalSale.category}`,
+        `${sale.category}${sale.subcategory.toUpperCase()}${sale.sph}${
+          sale.cyl
+        }x${sale.axis}_Add+${sale.add}`
+      );
+      const docSnap = await getDoc(docRef);
+      let prevPairs = 0;
+      if (docSnap.exists()) {
+        // console.log("Document data:", docSnap.data());
+        prevPairs = await docSnap.data().pairs;
+      } else {
+        // docSnap.data() will be undefined in this case
+        return alert("Stock not found!");
+      }
+      await updateDoc(docRef, {
+        pairs: prevPairs - finalSale.pairs,
+      });
+
       const billDocRef = doc(db, "bills", finalSale.buyerName.toLowerCase());
       const billDocSnap = await getDoc(billDocRef);
 
@@ -61,25 +81,7 @@ const SaleForm = () => {
         { name: finalSale.buyerName, lens: lensData },
         { merge: true }
       );
-      const docRef = doc(
-        db,
-        `stock/lenses/${finalSale.category}`,
-        `${sale.category}${sale.subcategory.toUpperCase()}${sale.sph}${
-          sale.cyl
-        }x${sale.axis}_Add+${sale.add}`
-      );
-      const docSnap = await getDoc(docRef);
-      let prevPairs = 0;
-      if (docSnap.exists()) {
-        // console.log("Document data:", docSnap.data());
-        prevPairs = await docSnap.data().pairs;
-      } else {
-        // docSnap.data() will be undefined in this case
-        alert("Stock not found!");
-      }
-      await updateDoc(docRef, {
-        pairs: prevPairs - finalSale.pairs,
-      });
+
       alert("Sale added successfully!");
     } catch (error) {
       alert("Some error occurred! Please try again.");

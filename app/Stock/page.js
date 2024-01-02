@@ -43,7 +43,11 @@ const Stock = () => {
             className="bg-white p-4 rounded shadow-md"
           >
             <h2 className="text-lg font-bold">
-              {`${item.category}${item.subcategory}${item.sph}${item.cyl}x${item.axis}/@+${item.add}`}
+              {`${item.category}${item.subcategory}${
+                item.sph != "0.00" ? item.sph : ""
+              }${item.cyl != "0.00" ? item.cyl : ""}${
+                item.axis != "0" ? `x${item.axis}` : ""
+              }${item.add != "0.00" ? `/@+${item.add}` : ""}`}
             </h2>
             <p className="text-gray-500">Quantity: {item.pairs}</p>
           </div>
