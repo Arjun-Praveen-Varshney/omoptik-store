@@ -8,10 +8,10 @@ const SaleForm = () => {
     date: new Date().toISOString().split("T")[0],
     category: "",
     subcategory: "",
-    sph: 0.0,
-    cyl: 0.0,
-    axis: "",
-    add: "",
+    sph: "0.00",
+    cyl: "0.00",
+    axis: "0",
+    add: "0.00",
     pairs: 0,
     price: 0,
     amount: 0,
@@ -173,6 +173,7 @@ const SaleForm = () => {
               type="text"
               placeholder="Enter Sph"
               onChange={handleChange}
+              defaultValue={"0.00"}
             />
           </div>
           <div className="w-1/2 ml-2">
@@ -189,6 +190,7 @@ const SaleForm = () => {
               type="text"
               placeholder="Enter Cyl"
               onChange={handleChange}
+              defaultValue={"0.00"}
             />
           </div>
         </div>
@@ -207,6 +209,7 @@ const SaleForm = () => {
               type="text"
               placeholder="Enter axis"
               onChange={handleChange}
+              defaultValue={"0"}
             />
           </div>
           <div className="w-1/2 ml-2">
@@ -222,6 +225,7 @@ const SaleForm = () => {
               name="add"
               type="text"
               placeholder="Enter Add"
+              defaultValue={"+0.00"}
               onChange={handleChange}
             />
           </div>

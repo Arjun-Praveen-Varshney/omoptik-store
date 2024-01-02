@@ -6,10 +6,10 @@ const addStock = () => {
   const [sale, setSale] = useState({
     category: "",
     subcategory: "",
-    sph: 0.0,
-    cyl: 0.0,
-    axis: "",
-    add: "",
+    sph: "0.00",
+    cyl: "0.00",
+    axis: "0",
+    add: "0.00",
     pairs: 0,
   });
 
@@ -91,6 +91,7 @@ const addStock = () => {
               type="text"
               placeholder="Enter Sph"
               onChange={handleChange}
+              defaultValue={"0.00"}
             />
           </div>
           <div className="w-1/2 ml-2">
@@ -107,6 +108,7 @@ const addStock = () => {
               type="text"
               placeholder="Enter Cyl"
               onChange={handleChange}
+              defaultValue={"0.00"}
             />
           </div>
         </div>
@@ -125,6 +127,7 @@ const addStock = () => {
               type="text"
               placeholder="Enter axis"
               onChange={handleChange}
+              defaultValue={"0"}
             />
           </div>
           <div className="w-1/2 ml-2">
@@ -139,6 +142,7 @@ const addStock = () => {
               id="add"
               name="add"
               type="text"
+              defaultValue={"+0.00"}
               placeholder="Enter Add"
               onChange={handleChange}
             />
