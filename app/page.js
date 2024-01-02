@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center h-screen gap-8 bg-gradient-to-b from-[#ff00ff] to-[#00bfff]">
+    <main className="flex flex-col items-center justify-center h-screen gap-8 bg-gray-300">
       <div className="font-semibold text-3xl text-center">
         Where do you want to go?
       </div>
