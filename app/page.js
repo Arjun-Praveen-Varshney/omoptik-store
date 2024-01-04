@@ -26,6 +26,11 @@ export default function Home() {
           View Stock
         </button>
       </Link>
+      <Link href="/bills">
+        <button className="bg-purple-500 focus:bg-purple-600 text-white rounded-lg px-4 py-2 font-medium text-lg">
+          View Bills
+        </button>
+      </Link>
     </main>
   );
 }

@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
-import { db, setDoc, doc } from "../../firebaseConfig";
+import { db, addDoc, collection } from "../../firebaseConfig";
+import Select from "react-select";
+import { categoryOptions } from "../helpers";
 
 const addStock = () => {
   const [sale, setSale] = useState({
     category: "",
-    subcategory: "",
     sph: "0.00",
     cyl: "0.00",
     axis: "0",
@@ -17,19 +18,14 @@ const addStock = () => {
     setSale({ ...sale, [e.target.name]: e.target.value });
   };
 
+  const handleCategoryChange = (selectedOption) => {
+    setSale({ ...sale, category: selectedOption.value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await setDoc(
-        doc(
-          db,
-          `stock/lenses/${sale.category}`,
-          `${sale.category}${sale.subcategory.toUpperCase()}${sale.sph}${
-            sale.cyl
-          }x${sale.axis}_Add+${sale.add}`
-        ),
-        sale
-      );
+      await addDoc(collection(db, "lenses"), sale);
       alert("Stock added successfully!");
     } catch (error) {
       alert("Some error occurred! Please try again.");
@@ -47,33 +43,14 @@ const addStock = () => {
           >
             Category
           </label>
-          <select
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          <Select
+            // placeholder="Select Category"
+            instanceId="category-select-addStock"
             id="category"
             name="category"
-            onChange={handleChange}
-            required={true}
-          >
-            <option value="">Select Category</option>
-            <option value="CR">CR</option>
-            <option value="PG">PG</option>
-            <option value="WT Glass">WT Glass</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="subcategory"
-          >
-            Sub Category
-          </label>
-          <input
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="subcategory"
-            name="subcategory"
-            type="text"
-            placeholder="Enter Sub-Category"
-            onChange={handleChange}
+            options={categoryOptions}
+            isSearchable={true}
+            onChange={(selectedOption) => handleCategoryChange(selectedOption)}
           />
         </div>
         <div className="flex mb-4">
@@ -135,15 +112,15 @@ const addStock = () => {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="add"
             >
-              Add (2 decimals)
+              Add (2 decimals, NO '+')
             </label>
             <input
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="add"
               name="add"
               type="text"
-              defaultValue={"+0.00"}
-              placeholder="Enter Add"
+              // defaultValue={"+0.00"}
+              placeholder="+0.00"
               onChange={handleChange}
             />
           </div>

@@ -1,13 +1,24 @@
 "use client";
 import { useState } from "react";
-import { db, setDoc, doc, updateDoc, getDoc } from "../../firebaseConfig";
+import Select from "react-select";
+import {
+  db,
+  setDoc,
+  doc,
+  updateDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+  getDoc,
+} from "../../firebaseConfig";
+import { categoryOptions } from "../helpers";
 
 const SaleForm = () => {
   const [sale, setSale] = useState({
     buyerName: "",
     date: new Date().toISOString().split("T")[0],
     category: "",
-    subcategory: "",
     sph: "0.00",
     cyl: "0.00",
     axis: "0",
@@ -22,6 +33,10 @@ const SaleForm = () => {
     setSale({ ...sale, [e.target.name]: e.target.value });
   };
 
+  const handleCategoryChange = (selectedOption) => {
+    setSale({ ...sale, category: selectedOption.value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const finalSale = {
@@ -32,14 +47,17 @@ const SaleForm = () => {
     // console.log(sale);
     // console.log(finalSale)
     try {
-      const docRef = doc(
-        db,
-        `stock/lenses/${finalSale.category}`,
-        `${sale.category}${sale.subcategory.toUpperCase()}${sale.sph}${
-          sale.cyl
-        }x${sale.axis}_Add+${sale.add}`
+      const q = query(
+        collection(db, "lenses"),
+        where("category", "==", finalSale.category),
+        where("sph", "==", finalSale.sph),
+        where("cyl", "==", finalSale.cyl),
+        where("axis", "==", finalSale.axis),
+        where("add", "==", finalSale.add)
       );
-      const docSnap = await getDoc(docRef);
+
+      const querySnapshot = await getDocs(q);
+      const docSnap = querySnapshot.docs[0];
       let prevPairs = 0;
       if (docSnap.exists()) {
         // console.log("Document data:", docSnap.data());
@@ -48,7 +66,7 @@ const SaleForm = () => {
         // docSnap.data() will be undefined in this case
         return alert("Stock not found!");
       }
-      await updateDoc(docRef, {
+      await updateDoc(doc(db, "lenses", docSnap.id), {
         pairs: prevPairs - finalSale.pairs,
       });
 
@@ -73,7 +91,6 @@ const SaleForm = () => {
         pairs: finalSale.pairs,
         price: finalSale.price,
         sph: finalSale.sph,
-        subcategory: finalSale.subcategory,
       });
 
       await setDoc(
@@ -132,32 +149,14 @@ const SaleForm = () => {
           >
             Category
           </label>
-          <select
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          <Select
+            // placeholder="Select Category"
+            instanceId="category-select-saleForm"
             id="category"
             name="category"
-            onChange={handleChange}
-          >
-            <option value="">Select Category</option>
-            <option value="CR">CR</option>
-            <option value="PG">PG</option>
-            <option value="WT Glass">WT Glass</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="subcategory"
-          >
-            Sub Category
-          </label>
-          <input
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="subcategory"
-            name="subcategory"
-            type="text"
-            placeholder="Enter Sub-Category"
-            onChange={handleChange}
+            options={categoryOptions}
+            isSearchable={true}
+            onChange={(selectedOption) => handleCategoryChange(selectedOption)}
           />
         </div>
         <div className="flex mb-4">
@@ -219,15 +218,15 @@ const SaleForm = () => {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="add"
             >
-              Add (2 decimals)
+              Add (2 decimals, NO '+')
             </label>
             <input
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="add"
               name="add"
               type="text"
-              placeholder="Enter Add"
-              defaultValue={"+0.00"}
+              placeholder="+0.00"
+              // defaultValue={"+0.00"}
               onChange={handleChange}
             />
           </div>

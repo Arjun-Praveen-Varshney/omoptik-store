@@ -1,0 +1,27 @@
+const categoryOptions = [
+  { value: "CR HC", label: "CR HC" },
+  { value: "CR ARC", label: "CR ARC" },
+  { value: "CR HC PG", label: "CR HC PG" },
+  { value: "CR ARC PG", label: "CR ARC PG" },
+  { value: "CR KT HC", label: "CR KT HC" },
+  { value: "CR KT ARC", label: "CR KT ARC" },
+  { value: "CR KT ARC B/B", label: "CR KT ARC B/B" },
+  { value: "CR KT HC PG", label: "CR KT HC PG" },
+  { value: "CR KT ARC PG", label: "CR KT ARC PG" },
+  { value: "CR V2 HC", label: "CR V2 HC" },
+  { value: "CR V2 ARC", label: "CR V2 ARC" },
+  { value: "CR V2 ARC B/B", label: "CR V2 ARC B/B" },
+  { value: "CR V2 ARC B/B PG", label: "CR V2 ARC B/B PG" },
+  { value: "CR V2 HC PG", label: "CR V2 HC PG" },
+  { value: "CR V2 ARC PG", label: "CR V2 ARC PG" },
+  { value: "CR ARC Poly", label: "CR ARC Poly" },
+  { value: "CR ARC Poly B/B", label: "CR ARC Poly B/B" },
+  { value: "CR ARC B/B", label: "CR ARC B/B" },
+  { value: "CR ARC B/B PG", label: "CR ARC B/B PG" },
+  { value: "WT55", label: "WT55" },
+  { value: "WTK", label: "WTK" },
+  { value: "PGK", label: "PGK" },
+  { value: "PG SV", label: "PG SV" },
+];
+
+export { categoryOptions };
