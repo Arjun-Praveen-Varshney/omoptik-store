@@ -74,8 +74,10 @@ const SaleForm = () => {
       const billDocSnap = await getDoc(billDocRef);
 
       let lensData = {};
+      let balance = 0;
       if (billDocSnap.exists()) {
         lensData = billDocSnap.data().lens || {};
+        balance = billDocSnap.data().balance || 0;
       }
 
       if (!lensData[finalSale.date]) {
@@ -91,11 +93,18 @@ const SaleForm = () => {
         pairs: finalSale.pairs,
         price: finalSale.price,
         sph: finalSale.sph,
+        paid: finalSale.paid,
       });
+
+      balance =
+        parseInt(balance) +
+        parseInt(finalSale.amount) -
+        parseInt(finalSale.paid);
+      // console.log(balance);
 
       await setDoc(
         billDocRef,
-        { name: finalSale.buyerName, lens: lensData },
+        { name: finalSale.buyerName, lens: lensData, balance: balance },
         { merge: true }
       );
 
@@ -218,7 +227,7 @@ const SaleForm = () => {
               className="block text-gray-700 text-sm font-bold mb-2"
               htmlFor="add"
             >
-              Add (2 decimals, NO '+')
+              Add (NO '+')
             </label>
             <input
               className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

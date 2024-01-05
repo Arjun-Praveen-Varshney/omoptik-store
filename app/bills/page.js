@@ -1,23 +1,37 @@
-import React from "react";
+"use client";
+import { useEffect, useState } from "react";
+import { getDocs, collection, db } from "../../firebaseConfig";
 
-const bills = ({ bills }) => {
+const bills = () => {
+  const [bills, setBills] = useState([]);
+
+  useEffect(() => {
+    const fetchBills = async () => {
+      const querySnapshot = await getDocs(collection(db, "bills"));
+      const billData = [];
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        // console.log(doc.id, " => ", doc.data());
+        billData.push(doc.data());
+      });
+      setBills(billData);
+      // console.log(billData);
+    };
+
+    fetchBills();
+  }, []);
+
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-2xl font-bold mb-4">All Bills</h1>
-      <ul className="w-full max-w-md">
-        {bills.map((bill) => (
-          <li
-            key={bill.id}
-            className="bg-white shadow-md rounded-md p-4 mb-4 flex items-center justify-between"
-          >
-            <div>
-              <h2 className="text-lg font-semibold">{bill.title}</h2>
-              <p className="text-gray-500">{bill.date}</p>
-            </div>
-            <span className="text-green-500">${bill.amount}</span>
-          </li>
+    <div className="container mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Bills</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {bills.map((item) => (
+          <div key={item.name} className="bg-white p-4 rounded shadow-md">
+            <h2 className="text-lg font-bold">{item.name}</h2>
+            <p className="text-gray-500">Balance: {item.balance}</p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
